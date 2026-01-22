@@ -1,0 +1,48 @@
+pipeline { 
+    agent any 
+ 
+    tools { 
+        maven 'maven3.9.12' 
+        jdk 'java17' 
+    } 
+ 
+    stages { 
+ 
+        stage('Checkout') { 
+            steps { 
+                git branch: 'main', url: 'https://github.com/charithathallem06/DevOps.git' 
+            } 
+        } 
+ 
+        stage('Parallel Jobs') { 
+            parallel { 
+ 
+                stage('Build') { 
+                    steps { 
+                        echo "Running Maven Build..." 
+                        sh 'mvn clean package' 
+                    } 
+                } 
+ 
+                stage('SonarQube Scan') { 
+                    steps { 
+                        echo "Running SonarQube Scan..." 
+                        withSonarQubeEnv('sonar') { 
+                            sh ''' 
+                            mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar \ 
+                            -Dsonar.projectKey=simple-java-app \ 
+                            -Dsonar.projectName=simple-java-app 
+                            ''' 
+                        } 
+                    } 
+                } 
+            } 
+        } 
+ 
+        stage('Post-Build') { 
+            steps { 
+                echo "Build + Sonar Scan completed successfully." 
+            } 
+        } 
+    } 
+}
