@@ -10,7 +10,7 @@ pipeline {
  
         stage('Checkout') { 
             steps { 
-                git branch: 'main', url: 'https://github.com/charithathallem06/DevOps.git' 
+                git branch: 'main', url: 'https://github.com/charithathallem06/sonar.git' 
             } 
         } 
  
