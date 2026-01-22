@@ -29,11 +29,11 @@ pipeline {
                     steps { 
                         echo "Running SonarQube Scan..." 
                         withSonarQubeEnv('sonar') { 
-                            sh ''' 
-                            mvn clean verify org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar \ 
-                            -Dsonar.projectKey=simple-java-app \ 
-                            -Dsonar.projectName=simple-java-app 
-                            ''' 
+                            sh """
+                            mvn sonar:sonar \
+                            -Dsonar.projectKey=sample-java-app \
+                            -Dsonar.projectName="Sample Java App"
+                             """
                         } 
                     } 
                 } 
